@@ -13,6 +13,7 @@ Account/name system for loading files
  - group by subject/different sets of cards
  - be able to flip cards
  - save/load system
+ - interface for user to enter flash cards
 
 ## Notes
  - writing to file
