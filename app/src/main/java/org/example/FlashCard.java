@@ -5,7 +5,7 @@ public class FlashCard {
     private String question;
     private String answer;
     private String topic;
-    private boolean fliped;
+    private boolean flipped;
 // constructs a new FlashCard object
     // initializes a question, answer, and a topic for the FlashCard.
     // parameters: question, answer, topic.
@@ -17,7 +17,7 @@ public class FlashCard {
         this.question = question;
         this.answer = answer;
         this.topic = topic;
-        this.fliped = false;
+        this.flipped = false;
     }
     // changes the current question on the FlashCard to a new one.
     // parameters: newQuestion the new question to be added.
@@ -37,6 +37,9 @@ public class FlashCard {
         }
         this.answer = newAnswer;
     }
+    // changes the current topic of the FlashCard to a new one.
+    // parameters: newTopic the new topic to be added.
+    // throws an IllegalArgumentException if newTopic is null.
     public void changeTopic(String newTopic) {
         if (newTopic == null) {
             throw new IllegalArgumentException("Topic is invalid.");
@@ -48,19 +51,33 @@ public class FlashCard {
     // flips to the answer if the FlashCard is currently on the question and vice versa.
     // returns the answer if the FlashCard flips to it, or question if the FlashCard flips to it.
     public String flip() {
-        if (!this.fliped) {
-            this.fliped = true;
+        if (!this.flipped) {
+            this.flipped = true;
             return this.answer;
         } else {
-            this.fliped = false;
+            this.flipped = false;
             return this.question;
         }
     }
+    // gets the current side of the FlashCard.
+    // returns the current side of the FlashCard.
     public String getCurrentSide() {
-        if (!this.fliped) {
+        if (!this.flipped) {
             return this.question;
         } else {
             return this.answer;
         }
+    }
+    public String getQuestion() {
+        return this.question;
+    }
+    public String getAnswer() {
+        return this.answer;
+    }
+    public String getTopic() {
+        return this.topic;
+    }
+    public boolean isFlipped() {
+        return this.flipped;
     }
 }
