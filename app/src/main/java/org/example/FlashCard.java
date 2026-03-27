@@ -37,6 +37,12 @@ public class FlashCard {
         }
         this.answer = newAnswer;
     }
+    public void changeTopic(String newTopic) {
+        if (newTopic == null) {
+            throw new IllegalArgumentException("Topic is invalid.");
+        }
+        this.topic = newTopic;
+    }
     // flips the FlashCard from question to answer and vice versa
     // depending on the current state of the FlashCard.
     // flips to the answer if the FlashCard is currently on the question and vice versa.
@@ -48,6 +54,13 @@ public class FlashCard {
         } else {
             this.fliped = false;
             return this.question;
+        }
+    }
+    public String getCurrentSide() {
+        if (!this.fliped) {
+            return this.question;
+        } else {
+            return this.answer;
         }
     }
 }
