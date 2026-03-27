@@ -11,7 +11,7 @@ public class FlashCard {
     // parameters: question, answer, topic.
     // throws an IllegalArgumentException if any of the parameters is null.
     public FlashCard(String question, String answer, String topic) {
-        if (question.equals("null") || answer.equals("null") || topic.equals("null")) {
+        if (question == null || answer == null || topic == null) {
             throw new IllegalArgumentException("The question, answer, or topic is invalid.");
         }
         this.question = question;
@@ -23,7 +23,7 @@ public class FlashCard {
     // parameters: newQuestion the new question to be added.
     // throws an IllegalArgumentException if newQuestion is null.
     public void changeQuestion(String newQuestion) {
-        if (newQuestion.equals("null")) {
+        if (newQuestion == null) {
             throw new IllegalArgumentException("Question is invalid.");
         }
         this.question = newQuestion;
@@ -32,7 +32,7 @@ public class FlashCard {
     // parameters: newAnswer the new answer to be added.
     // throws an IllegalArgumentException if newAnswer is null.
     public void changeAnswer(String newAnswer) {
-        if (newAnswer.equals("null")) {
+        if (newAnswer == null) {
             throw new IllegalArgumentException("The answer is invalid.");
         }
         this.answer = newAnswer;
@@ -42,7 +42,7 @@ public class FlashCard {
     // flips to the answer if the FlashCard is currently on the question and vice versa.
     // returns the answer if the FlashCard flips to it, or question if the FlashCard flips to it.
     public String flip() {
-        if (this.fliped == false) {
+        if (!this.fliped) {
             this.fliped = true;
             return this.answer;
         } else {
