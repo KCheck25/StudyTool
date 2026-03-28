@@ -80,4 +80,17 @@ public class FlashCard {
     public boolean isFlipped() {
         return this.flipped;
     }
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        } else if (other instanceof FlashCard) {
+            FlashCard card = (FlashCard) other;
+            return this.question.equals(card.question) && this.answer.equals(card.answer) && this.topic.equals(card.topic);
+        } else {
+            return false;
+        }
+    }
+    public String toString() {
+        return "Topic: " + this.topic + ". Question: " + this.question + ". Answer: " + this.answer;
+    }
 }
