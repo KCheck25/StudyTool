@@ -1,7 +1,7 @@
 package org.example;
 import java.util.*;
 import java.io.*;
-public class FlashCard {
+public class FlashCard implements Comparable<FlashCard> {
     private String question;
     private String answer;
     private String topic;
@@ -90,6 +90,15 @@ public class FlashCard {
     }
     public boolean isFlipped() {
         return this.flipped;
+    }
+    public int compareTo(FlashCard other) {
+        if (this.priorityScore < other.priorityScore) {
+            return -1;
+        } else if (this.priorityScore == other.priorityScore) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
     public boolean equals(Object other) {
         if (other == this) {
