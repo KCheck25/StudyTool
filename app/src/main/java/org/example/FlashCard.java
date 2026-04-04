@@ -1,22 +1,24 @@
 package org.example;
 import java.util.*;
 import java.io.*;
-public class FlashCard {
+public class FlashCard implements Comparable<FlashCard> {
     private String question;
     private String answer;
     private String topic;
+    private int priorityScore;
     private boolean flipped;
 // constructs a new FlashCard object
     // initializes a question, answer, and a topic for the FlashCard.
     // parameters: question, answer, topic.
     // throws an IllegalArgumentException if any of the parameters is null.
-    public FlashCard(String question, String answer, String topic) {
-        if (question == null || answer == null || topic == null) {
-            throw new IllegalArgumentException("The question, answer, or topic is invalid.");
+    public FlashCard(String question, String answer, String topic, int priorityScore) {
+        if (question == null || answer == null || topic == null || priorityScore < 1 || priorityScore > 3) {
+            throw new IllegalArgumentException("The question, answer, priority score, or topic is invalid.");
         }
         this.question = question;
         this.answer = answer;
         this.topic = topic;
+        this.priorityScore = priorityScore;
         this.flipped = false;
     }
     // changes the current question on the FlashCard to a new one.
@@ -45,6 +47,12 @@ public class FlashCard {
             throw new IllegalArgumentException("Topic is invalid.");
         }
         this.topic = newTopic;
+    }
+    public void changePriorityScore(int newPriorityScore) {
+        if (newPriorityScore < 1 || newPriorityScore > 3) {
+            throw new IllegalArgumentException("The priority score is invalid.");
+        }
+        this.priorityScore = newPriorityScore;
     }
     // flips the FlashCard from question to answer and vice versa
     // depending on the current state of the FlashCard.
@@ -77,20 +85,32 @@ public class FlashCard {
     public String getTopic() {
         return this.topic;
     }
+    public int getPriorityScore() {
+        return this.priorityScore;
+    }
     public boolean isFlipped() {
         return this.flipped;
+    }
+    public int compareTo(FlashCard other) {
+        if (this.priorityScore < other.priorityScore) {
+            return -1;
+        } else if (this.priorityScore == other.priorityScore) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
     public boolean equals(Object other) {
         if (other == this) {
             return true;
         } else if (other instanceof FlashCard) {
             FlashCard card = (FlashCard) other;
-            return this.question.equals(card.question) && this.answer.equals(card.answer) && this.topic.equals(card.topic);
+            return this.question.equals(card.question) && this.answer.equals(card.answer) && this.topic.equals(card.topic) && this.priorityScore == card.priorityScore;
         } else {
             return false;
         }
     }
     public String toString() {
-        return "Topic: " + this.topic + ". Question: " + this.question + ". Answer: " + this.answer;
+        return "Topic: " + this.topic + ". Question: " + this.question + ". Priority score: " + this.priorityScore + ". Answer: " + this.answer;
     }
 }
