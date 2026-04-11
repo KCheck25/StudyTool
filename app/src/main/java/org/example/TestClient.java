@@ -8,7 +8,16 @@ import java.util.Scanner;
 
 public class TestClient {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        Scanner console = new Scanner(System.in);
+        FlashCard fc = new FlashCard("blah1", "blah2", "blah3", 3);
+        String o = "";
+        while (!o.equals("q")) {
+            o = console.next();
+            if (o.equals("f")) {
+                fc.flip();
+            }
+        }
         runNotesLoop();
     }
 

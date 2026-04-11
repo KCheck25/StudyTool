@@ -1,6 +1,7 @@
 package org.example;
 import java.util.*;
 import java.io.*;
+import javax.sound.sampled.*;
 public class FlashCard implements Comparable<FlashCard> {
     private String question;
     private String answer;
@@ -58,12 +59,24 @@ public class FlashCard implements Comparable<FlashCard> {
     // depending on the current state of the FlashCard.
     // flips to the answer if the FlashCard is currently on the question and vice versa.
     // returns the answer if the FlashCard flips to it, or question if the FlashCard flips to it.
-    public String flip() {
+    public String flip() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if (!this.flipped) {
             this.flipped = true;
+            InputStream stream = getClass().getResourceAsStream("/sounds/flipToAnswer.wav");
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(stream);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+            clip.drain();
             return this.answer;
         } else {
             this.flipped = false;
+            InputStream stream = getClass().getResourceAsStream("/sounds/flipToQuestion.wav");
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(stream);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+            clip.drain();
             return this.question;
         }
     }
@@ -91,6 +104,16 @@ public class FlashCard implements Comparable<FlashCard> {
     public boolean isFlipped() {
         return this.flipped;
     }
+    public boolean makeGuess(String guess) {
+        if (guess == null) {
+            throw new IllegalArgumentException("Guess is invalid.");
+        }
+        return guess.equals(this.answer);
+    }
+    public String reset() {
+        this.flipped = false;
+        return this.question;
+    }
     public int compareTo(FlashCard other) {
         if (this.priorityScore < other.priorityScore) {
             return -1;
@@ -111,6 +134,11 @@ public class FlashCard implements Comparable<FlashCard> {
         }
     }
     public String toString() {
-        return "Topic: " + this.topic + ". Question: " + this.question + ". Priority score: " + this.priorityScore + ". Answer: " + this.answer;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Topic: ").append(this.topic);
+        sb.append(" Question: ").append(this.question);
+        sb.append(" Answer: ").append(this.answer);
+        sb.append(" Priority Score: ").append(this.priorityScore);
+        return sb.toString();
     }
 }
