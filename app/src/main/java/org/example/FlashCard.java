@@ -62,7 +62,7 @@ public class FlashCard implements Comparable<FlashCard> {
     public String flip() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if (!this.flipped) {
             this.flipped = true;
-            InputStream stream = getClass().getResourceAsStream("/sounds/flipToAnswer.wav");
+            InputStream stream = getClass().getClassLoader().getResourceAsStream("sounds/flipToAnswer.wav");
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(stream);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
@@ -71,7 +71,7 @@ public class FlashCard implements Comparable<FlashCard> {
             return this.answer;
         } else {
             this.flipped = false;
-            InputStream stream = getClass().getResourceAsStream("/sounds/flipToQuestion.wav");
+            InputStream stream = getClass().getClassLoader().getResourceAsStream("sounds/flipToQuestion.wav");
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(stream);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
