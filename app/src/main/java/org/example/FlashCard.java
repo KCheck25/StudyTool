@@ -62,21 +62,11 @@ public class FlashCard implements Comparable<FlashCard> {
     public String flip() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if (!this.flipped) {
             this.flipped = true;
-            InputStream stream = getClass().getClassLoader().getResourceAsStream("sounds/flipToAnswer.wav");
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(stream);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.start();
-            clip.drain();
+            this.playSound("flipToAnswer.wav");
             return this.answer;
         } else {
             this.flipped = false;
-            InputStream stream = getClass().getClassLoader().getResourceAsStream("sounds/flipToQuestion.wav");
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(stream);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.start();
-            clip.drain();
+            this.playSound("flipToQuestion.wav");
             return this.question;
         }
     }
@@ -104,15 +94,29 @@ public class FlashCard implements Comparable<FlashCard> {
     public boolean isFlipped() {
         return this.flipped;
     }
-    public boolean makeGuess(String guess) {
+    public boolean makeGuess(String guess) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if (guess == null) {
             throw new IllegalArgumentException("Guess is invalid.");
         }
-        return guess.equals(this.answer);
+        boolean isCorrect = guess.equalsIgnoreCase(this.answer);
+        if (isCorrect) {
+            this.playSound("correctGuess.wav");
+        } else {
+            this.playSound("wrongGuess.wav");
+        }
+        return isCorrect;
     }
     public String reset() {
         this.flipped = false;
         return this.question;
+    }
+    private void playSound(String fileName) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        InputStream stream = getClass().getClassLoader().getResourceAsStream("sounds/" + fileName);
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(stream);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioStream);
+        clip.start();
+        clip.drain();
     }
     public int compareTo(FlashCard other) {
         if (this.priorityScore < other.priorityScore) {
