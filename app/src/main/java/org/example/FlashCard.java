@@ -102,7 +102,7 @@ public class FlashCard implements Comparable<FlashCard> {
         if (isCorrect) {
             this.playSound("correctGuess.wav");
         } else {
-            this.playSound("wrongGuess.wav");
+            this.playSound("CuteChicken.wav");
         }
         return isCorrect;
     }
