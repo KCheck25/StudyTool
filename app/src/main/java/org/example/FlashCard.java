@@ -100,7 +100,7 @@ public class FlashCard implements Comparable<FlashCard> {
         }
         boolean isCorrect = guess.equalsIgnoreCase(this.answer);
         if (isCorrect) {
-            this.playSound("correctGuess.wav");
+            this.playSound("andHisNameIsJohnCena.wav");
         } else {
             this.playSound("CuteChicken.wav");
         }

@@ -18,9 +18,12 @@ public class TestClient {
                 fc.flip();
             }
         }
-        System.out.print("enter guess: ");
-        String guess = console.next();
-        fc.makeGuess(guess);
+        o = "blah";
+        while (!o.equals("q")) {
+            System.out.print("Enter Guess: ");
+            String guess = console.next();
+            fc.makeGuess(guess);
+        }
         runNotesLoop();
     }
 
