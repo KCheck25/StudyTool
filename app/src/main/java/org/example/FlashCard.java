@@ -100,9 +100,21 @@ public class FlashCard implements Comparable<FlashCard> {
         }
         boolean isCorrect = guess.equalsIgnoreCase(this.answer);
         if (isCorrect) {
-            this.playSound("andHisNameIsJohnCena.wav");
+            if (this.priorityScore == 1) {
+                this.playSound("correctGuess.wav");
+            } else if (this.priorityScore == 2) {
+                this.playSound("correctGuess2.wav");
+            } else {
+                this.playSound("andHisNameIsJohnCena.wav");
+            }
         } else {
-            this.playSound("CuteChicken.wav");
+            if (this.priorityScore == 1) {
+                this.playSound("wrongGuess.wav");
+            } else if (this.priorityScore == 2) {
+                this.playSound("wrongGuess2.wav");
+            } else {
+                this.playSound("CuteChicken.wav");
+            }
         }
         return isCorrect;
     }
@@ -139,10 +151,10 @@ public class FlashCard implements Comparable<FlashCard> {
     }
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Topic: ").append(this.topic);
-        sb.append(" Question: ").append(this.question);
-        sb.append(" Answer: ").append(this.answer);
-        sb.append(" Priority Score: ").append(this.priorityScore);
+        sb.append("Topic: ").append(this.topic).append("\n");
+        sb.append(" Question: ").append(this.question).append("\n");
+        sb.append(" Answer: ").append(this.answer).append("\n");
+        sb.append(" Priority Score: ").append(this.priorityScore).append("\n");
         return sb.toString();
     }
 }

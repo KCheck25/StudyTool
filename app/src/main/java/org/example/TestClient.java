@@ -7,22 +7,24 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class TestClient {
-    
+
     public static void main(String[] args) throws Exception {
         Scanner console = new Scanner(System.in);
         FlashCard fc = new FlashCard("blah1", "blah2", "blah3", 3);
         String o = "";
-        while (!o.equals("q")) {
+        while (!o.equalsIgnoreCase("q")) {
             o = console.next();
             if (o.equals("f")) {
                 fc.flip();
             }
         }
         o = "blah";
-        while (!o.equals("q")) {
+        while (!o.equalsIgnoreCase("q")) {
             System.out.print("Enter Guess: ");
-            String guess = console.next();
-            fc.makeGuess(guess);
+            o = console.next();
+            if (!o.equalsIgnoreCase("q")) {
+                fc.makeGuess(o);
+            }
         }
         runNotesLoop();
     }
@@ -74,16 +76,16 @@ public class TestClient {
         NotePage note = new NotePage(testString, new int[2]);
         note.setCursorLoc(1, 2);
 
-        int[] start = {0, 6};
-        int[] end = {1, 4};
+        int[] start = { 0, 6 };
+        int[] end = { 1, 4 };
 
         System.out.printf("Full Doc:\n\"%s\"\n", note.getFull());
         note.replaceLine("potato");
         System.out.printf("Word: \"%s\"\n", note.getWord());
-        //System.out.printf("Full line: \"%s\"\n", note.getLine());
-        //System.out.println();
-        //note.insert("goodbye");
-        //note.replace("hehe", start, end);
+        // System.out.printf("Full line: \"%s\"\n", note.getLine());
+        // System.out.println();
+        // note.insert("goodbye");
+        // note.replace("hehe", start, end);
         System.out.printf("Full Doc:\n\"%s\"\n", note.getFull());
     }
 
