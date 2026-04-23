@@ -10,9 +10,9 @@ public class FlashCard implements Comparable<FlashCard> {
     private boolean flipped;
 // constructs a new FlashCard object
     // initializes a question, answer, and a topic for the FlashCard.
-    // parameters: question, answer, topic.
-    // throws an IllegalArgumentException if any of the parameters is null.
-    public FlashCard(String question, String answer, String topic, int priorityScore) {
+    // parameters: question, answer, topic, priorityScore, isLoadingFromFiles.
+    // throws an IllegalArgumentException if topic,question, or answer is null.
+    public FlashCard(String topic, String question, String answer, int priorityScore, boolean isLoadingFromFiles) throws Exception {
         if (question == null || answer == null || topic == null || priorityScore < 1 || priorityScore > 3) {
             throw new IllegalArgumentException("The question, answer, priority score, or topic is invalid.");
         }
@@ -21,6 +21,9 @@ public class FlashCard implements Comparable<FlashCard> {
         this.topic = topic;
         this.priorityScore = priorityScore;
         this.flipped = false;
+        if (!isLoadingFromFiles) {
+            this.playSound("flashcardCreation.wav");
+        }
     }
     // changes the current question on the FlashCard to a new one.
     // parameters: newQuestion the new question to be added.
@@ -63,21 +66,16 @@ public class FlashCard implements Comparable<FlashCard> {
         if (!this.flipped) {
             this.flipped = true;
             this.playSound("flipToAnswer.wav");
-            return this.answer;
         } else {
             this.flipped = false;
             this.playSound("flipToQuestion.wav");
-            return this.question;
         }
+        return this.toString();
     }
     // gets the current side of the FlashCard.
     // returns the current side of the FlashCard.
     public String getCurrentSide() {
-        if (!this.flipped) {
-            return this.question;
-        } else {
-            return this.answer;
-        }
+        return this.toString();
     }
     public String getQuestion() {
         return this.question;
@@ -130,15 +128,49 @@ public class FlashCard implements Comparable<FlashCard> {
         clip.start();
         clip.drain();
     }
+    // compares two flashcards with one another for sorting.
+    // compares based on the priority score 1st, with flashcards
+    // holding higher priority scores coming first.
+    // if both flashcards have the same priority score, compares alphabetically starting from the topic.
+    // if topics are equal alphabetically, compares similarly with questions followed by the answers
+    // if the questions are equal as well.
+    // parameters: other, the other flashcard to compare with.
+    // returns either a negative, positive, or zero to be able to sort.
     public int compareTo(FlashCard other) {
-        if (this.priorityScore < other.priorityScore) {
+        if (other.priorityScore < this.priorityScore) {
             return -1;
         } else if (this.priorityScore == other.priorityScore) {
-            return 0;
+            if (this.topic.compareTo(other.topic) < 0) {
+                return -1;
+            } else if (this.topic.compareTo(other.topic) == 0) {
+                if (this.question.compareTo(other.question) < 0) {
+                    return -1;
+                } else if (this.question.compareTo(other.question) == 0) {
+                    if (this.answer.compareTo(other.answer) < 0) {
+                        return -1;
+                    } else if (this.answer.compareTo(other.answer) == 0) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                } else {
+                    return 1;
+                }
+            } else {
+                return 1;
+            }
         } else {
             return 1;
         }
     }
+    public int hashCode() {
+        return Objects.hash(this.topic, this.question, this.answer, this.priorityScore);
+    }
+    // checks if two objects are equal to one another.
+    // parameters: other, the other object to compare with.
+    // returns: true if other is the same as the flashcard, true if other is a flashcard and has
+    // same topic, question, answer, and priority score as the flash card.
+    // false otherwise.
     public boolean equals(Object other) {
         if (other == this) {
             return true;
@@ -149,12 +181,18 @@ public class FlashCard implements Comparable<FlashCard> {
             return false;
         }
     }
+    // returns a representation of the flashcard.
+    // the topic, question, and priority score each on its own line if the flashcard is on the question’s side,
+    // or the answer if the flashcard is on the answer’s side.
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Topic: ").append(this.topic).append("\n");
-        sb.append(" Question: ").append(this.question).append("\n");
-        sb.append(" Answer: ").append(this.answer).append("\n");
-        sb.append(" Priority Score: ").append(this.priorityScore).append("\n");
+        if (this.flipped) {
+            sb.append("Answer: ").append(this.answer);
+        } else {
+            sb.append("Topic: ").append(this.topic).append("\n");
+            sb.append("Question: ").append(this.question).append("\n");
+            sb.append("Priority Score: ").append(this.priorityScore);
+        }
         return sb.toString();
     }
 }

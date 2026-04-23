@@ -6,26 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+
 public class TestClient {
 
     public static void main(String[] args) throws Exception {
         Scanner console = new Scanner(System.in);
-        FlashCard fc = new FlashCard("blah1", "blah2", "blah3", 3);
-        String o = "";
-        while (!o.equalsIgnoreCase("q")) {
-            o = console.next();
-            if (o.equals("f")) {
-                fc.flip();
-            }
-        }
-        o = "blah";
-        while (!o.equalsIgnoreCase("q")) {
-            System.out.print("Enter Guess: ");
-            o = console.next();
-            if (!o.equalsIgnoreCase("q")) {
-                fc.makeGuess(o);
-            }
-        }
+        flashcardTesting(console);
         runNotesLoop();
     }
 
@@ -87,6 +73,33 @@ public class TestClient {
         // note.insert("goodbye");
         // note.replace("hehe", start, end);
         System.out.printf("Full Doc:\n\"%s\"\n", note.getFull());
+    }
+    public static void flashcardTesting(Scanner console) throws Exception {
+        System.out.print("Enter topic: ");
+        String topic = console.nextLine();
+        System.out.print("Enter question: ");
+        String question = console.nextLine();
+        System.out.print("Enter answer: ");
+        String answer = console.nextLine();
+        System.out.print("Enter priority score 1-3: ");
+        int priorityScore = Integer.parseInt(console.nextLine());
+        FlashCard fc = new FlashCard(topic, question, answer, priorityScore, false);
+        String o = "";
+        while (!o.equalsIgnoreCase("q")) {
+            o = console.nextLine();
+            if (o.equalsIgnoreCase("f")) {
+                String side = fc.flip();
+                System.out.println(side);
+            }
+        }
+        o = "blah";
+        while (!o.equalsIgnoreCase("q")) {
+            System.out.print("Enter Guess: ");
+            o = console.nextLine();
+            if (!o.equalsIgnoreCase("q")) {
+                fc.makeGuess(o);
+            }
+        }
     }
 
 }
