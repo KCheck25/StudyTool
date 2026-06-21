@@ -1,10 +1,9 @@
 package org.example;
-
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 
 public class TestClient {
@@ -12,6 +11,7 @@ public class TestClient {
     public static void main(String[] args) throws Exception {
         Scanner console = new Scanner(System.in);
         flashcardTesting(console);
+        testDeck(console);
         runNotesLoop();
     }
 
@@ -83,7 +83,7 @@ public class TestClient {
         String answer = console.nextLine();
         System.out.print("Enter priority score 1-3: ");
         int priorityScore = Integer.parseInt(console.nextLine());
-        FlashCard fc = new FlashCard(topic, question, answer, priorityScore, false);
+        FlashCard fc = new FlashCard(topic, priorityScore, question, answer, false);
         String o = "";
         while (!o.equalsIgnoreCase("q")) {
             o = console.nextLine();
@@ -101,5 +101,68 @@ public class TestClient {
             }
         }
     }
-
+    public static void testDeck(Scanner console) throws Exception {
+        System.out.print("enter subject");
+        String subject = console.nextLine();
+        System.out.print("do you want your deck to be sorted? y for yes");
+        String answer = console.nextLine();
+        boolean isSorted = false;
+        if (answer.equalsIgnoreCase("y")) {
+            isSorted = true;
+        }
+        Deck deck = new Deck(subject, isSorted);
+        String o = "";
+        while (!o.equalsIgnoreCase("q")) {
+            System.out.print("A: add, R: remove, N: next card, GT: get all topics, GBT: get by topic, GCP: get completion percentage: ");
+            o = console.nextLine();
+            if (o.equalsIgnoreCase("a")) {
+                System.out.print("enter topic: ");
+                String topic = console.nextLine();
+                System.out.print("priority score: ");
+                int priorityScore = Integer.parseInt(console.nextLine());
+                System.out.print("question: ");
+                String question = console.nextLine();
+                System.out.print("answer: ");
+                String answer2 = console.nextLine();
+                FlashCard fc = new FlashCard(topic, priorityScore, question, answer2, false);
+                deck.addCard(fc);
+            } else if (o.equalsIgnoreCase("n")) {
+                FlashCard fc = deck.nextCard();
+                if (fc == null) {
+                    System.out.println(fc);
+                    return;
+                }
+                System.out.println(fc.reset());
+                String o2 = "";
+                while (!o2.equalsIgnoreCase("q")) {
+                    o2 = console.nextLine();
+                    if (o2.equalsIgnoreCase("f")) {
+                        fc.flip();
+                        System.out.println(fc.toString());
+                    } else if (o2.equalsIgnoreCase("m")) {
+                        System.out.print("enter guess: ");
+                        fc.makeGuess(console.nextLine());
+                    }
+                }
+            } else if (o.equalsIgnoreCase("GT")) {
+                System.out.print("A for active, V for viewed: ");
+                o = console.nextLine();
+                Set<String> topics = null;
+                if (o.equalsIgnoreCase("a")) {
+                    topics = deck.getAllTopics(false);
+                } else if (o.equalsIgnoreCase("v")) {
+                    topics = deck.getAllTopics(true);
+                } else {
+                    System.out.println("invalid option.");
+                }
+                System.out.println(topics);
+            } else if (o.equalsIgnoreCase("GBT")) {
+                System.out.print("what topic would you like to get? ");
+                o = console.nextLine();
+                for (FlashCard fc : deck.getByTopic(o, false)) {
+                    System.out.println(fc.reset());
+                }
+            }
+        }
+    }
 }
