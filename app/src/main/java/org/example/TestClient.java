@@ -11,15 +11,14 @@ public class TestClient {
 
     public static void main(String[] args) throws Exception {
         Scanner console = new Scanner(System.in);
-        flashcardTesting(console);
-        runNotesLoop();
+        //flashcardTesting(console);
+        runNotesLoop(console);
     }
 
-    public static void runNotesLoop() {
+    public static void runNotesLoop(Scanner console) {
         NotePage note = new NotePage();
         boolean running = true;
         while (running) {
-            Scanner console = new Scanner(System.in);
             System.out.print("Enter text: ");
             String input = console.nextLine();
             if (input.equals("quit") || input.equals("q")) {

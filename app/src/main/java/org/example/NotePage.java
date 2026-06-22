@@ -1,4 +1,7 @@
 package org.example;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -43,7 +46,13 @@ public class NotePage {
 
         System.out.println(this.contents);
 
-    }    
+    }
+
+    public static NotePage openFileAsNote(String filepath) throws IOException {
+        Path path = Path.of(filepath);
+        Files.readString(path);
+        return new NotePage();
+    }
 
     /**
      * Returns a set of all characters in the given string
