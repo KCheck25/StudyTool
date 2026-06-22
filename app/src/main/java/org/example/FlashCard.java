@@ -12,17 +12,17 @@ public class FlashCard implements Comparable<FlashCard> {
     // initializes a question, answer, and a topic for the FlashCard.
     // parameters: question, answer, topic, priorityScore, isLoadingFromFiles.
     // throws an IllegalArgumentException if topic,question, or answer is null.
-    public FlashCard(String topic, String question, String answer, int priorityScore, boolean isLoadingFromFiles) throws Exception {
+    public FlashCard(String topic, int priorityScore, String question, String answer, boolean isLoadingFromFiles) throws Exception {
         if (question == null || answer == null || topic == null || priorityScore < 1 || priorityScore > 3) {
             throw new IllegalArgumentException("The question, answer, priority score, or topic is invalid.");
         }
+        this.topic = topic;
         this.question = question;
         this.answer = answer;
-        this.topic = topic;
         this.priorityScore = priorityScore;
         this.flipped = false;
         if (!isLoadingFromFiles) {
-            this.playSound("flashcardCreation.wav");
+            Audio.playSound("flashcardCreation.wav");
         }
     }
     // changes the current question on the FlashCard to a new one.
@@ -65,10 +65,10 @@ public class FlashCard implements Comparable<FlashCard> {
     public String flip() throws UnsupportedAudioFileException, IOException, LineUnavailableException {
         if (!this.flipped) {
             this.flipped = true;
-            this.playSound("flipToAnswer.wav");
+            Audio.playSound("flipToAnswer.wav");
         } else {
             this.flipped = false;
-            this.playSound("flipToQuestion.wav");
+            Audio.playSound("flipToQuestion.wav");
         }
         return this.toString();
     }
@@ -99,34 +99,26 @@ public class FlashCard implements Comparable<FlashCard> {
         boolean isCorrect = guess.equalsIgnoreCase(this.answer);
         if (isCorrect) {
             if (this.priorityScore == 1) {
-                this.playSound("correctGuess.wav");
+                Audio.playSound("correctGuess.wav");
             } else if (this.priorityScore == 2) {
-                this.playSound("correctGuess2.wav");
+                Audio.playSound("correctGuess2.wav");
             } else {
-                this.playSound("andHisNameIsJohnCena.wav");
+                Audio.playSound("andHisNameIsJohnCena.wav");
             }
         } else {
             if (this.priorityScore == 1) {
-                this.playSound("wrongGuess.wav");
+                Audio.playSound("wrongGuess.wav");
             } else if (this.priorityScore == 2) {
-                this.playSound("wrongGuess2.wav");
+                Audio.playSound("wrongGuess2.wav");
             } else {
-                this.playSound("CuteChicken.wav");
+                Audio.playSound("CuteChicken.wav");
             }
         }
         return isCorrect;
     }
     public String reset() {
         this.flipped = false;
-        return this.question;
-    }
-    private void playSound(String fileName) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-        InputStream stream = getClass().getClassLoader().getResourceAsStream("sounds/" + fileName);
-        AudioInputStream audioStream = AudioSystem.getAudioInputStream(stream);
-        Clip clip = AudioSystem.getClip();
-        clip.open(audioStream);
-        clip.start();
-        clip.drain();
+        return this.toString();
     }
     // compares two flashcards with one another for sorting.
     // compares based on the priority score 1st, with flashcards
@@ -187,12 +179,15 @@ public class FlashCard implements Comparable<FlashCard> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (this.flipped) {
-            sb.append("Answer: ").append(this.answer);
+            sb.append("{").append(this.answer).append("}");
         } else {
-            sb.append("Topic: ").append(this.topic).append("\n");
-            sb.append("Question: ").append(this.question).append("\n");
-            sb.append("Priority Score: ").append(this.priorityScore);
+            sb.append("[").append(this.topic).append("]").append(" ");
+            sb.append("Priority Score: ").append(this.priorityScore).append("\n");
+            sb.append(this.question);
+            if (!this.question.endsWith("?")) {
+                sb.append("?");
+            }
         }
-        return sb.toString();
+        return sb.toString().indent(this.topic.length() - 1).strip();
     }
 }
