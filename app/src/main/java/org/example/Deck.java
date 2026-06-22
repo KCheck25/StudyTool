@@ -51,6 +51,25 @@ public class Deck {
         }
         this.subject = newSubject;
     }
+    public FlashCard getCard(String questionOrAnswer, char option, boolean viewed) {
+        this.validateDeck(viewed);
+        if (option != 'q' || option != 'Q' || option != 'a' || option != 'A') {
+            throw new IllegalArgumentException("option is invalid.");
+        }
+        Set<FlashCard> cards = this.selectSet(viewed);
+        for (FlashCard card : cards) {
+            if (option == 'q' || option == 'Q') {
+                if (card.getQuestion().equalsIgnoreCase(questionOrAnswer)) {
+                    return card;
+                }
+            } else {
+                if (card.getAnswer().equalsIgnoreCase(questionOrAnswer)) {
+                    return card;
+                }
+            }
+        }
+        return null;
+    }
     public Set<FlashCard> getAllCards(boolean viewed) {
         Set<FlashCard> cards = this.selectSet(viewed);
         Set<FlashCard> result = this.assignSorting();
