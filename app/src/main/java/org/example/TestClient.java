@@ -126,7 +126,7 @@ public class TestClient {
                 FlashCard fc = new FlashCard(topic, priorityScore, question, answer2, false);
                 deck.addCard(fc);
             } else if (o.equalsIgnoreCase("n")) {
-                FlashCard fc = deck.nextCard();
+                FlashCard fc = deck.nextCard(false);
                 if (fc == null) {
                     System.out.println(fc);
                     return;
@@ -158,7 +158,7 @@ public class TestClient {
             } else if (o.equalsIgnoreCase("GBT")) {
                 System.out.print("what topic would you like to get? ");
                 o = console.nextLine();
-                for (FlashCard fc : deck.getByTopic(o, false)) {
+                for (FlashCard fc : deck.getByTopic(o, false, false)) {
                     System.out.println(fc.reset());
                 }
             }

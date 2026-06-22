@@ -70,13 +70,14 @@ public class Deck {
         }
         return null;
     }
-    public Set<FlashCard> getAllCards(boolean viewed) {
+    public Set<FlashCard> getAllCards(boolean viewed, boolean preview) {
+        this.validateDeck(viewed);
         Set<FlashCard> cards = this.selectSet(viewed);
         Set<FlashCard> result = this.assignSorting();
         result.addAll(cards);
-        if (!viewed) {
-            this.viewedFlashCards.addAll(cards);
+        if (!viewed && !preview) {
             cards.clear();
+            this.viewedFlashCards.addAll(result);
         }
         return result;
     }
@@ -97,6 +98,7 @@ public class Deck {
         }
     }
     public void removeAllCards(boolean viewed) {
+        this.validateDeck(viewed);
         Set<FlashCard> cards = this.selectSet(viewed);
         cards.clear();
     }
@@ -143,17 +145,19 @@ public class Deck {
         }
         return sb.toString().indent(2).strip();
     }
-    public FlashCard nextCard() {
+    public FlashCard nextCard(boolean preview) {
         Iterator<FlashCard> it = this.flashCards.iterator();
         if (!it.hasNext()) {
             return null;
         }
         FlashCard card = it.next();
-        it.remove();
-        this.viewedFlashCards.add(card);
+        if (!preview) {
+            it.remove();
+            this.viewedFlashCards.add(card);
+        }
         return card;
     }
-    public Set<FlashCard> getByTopic(String topic, boolean viewed) {
+    public Set<FlashCard> getByTopic(String topic, boolean viewed, boolean preview) {
         Set<FlashCard> cards = this.selectSet(viewed);
         if (topic == null) {
             throw new IllegalArgumentException("Topic is invalid.");
@@ -164,7 +168,7 @@ public class Deck {
             FlashCard card = it.next();
             if (card.getTopic().equalsIgnoreCase(topic)) {
                 result.add(card);
-                if (!viewed) {
+                if (!viewed && !preview) {
                     it.remove();
                     this.viewedFlashCards.add(card);
                 }
@@ -172,7 +176,7 @@ public class Deck {
         }
         return result;
     }
-    public Set<FlashCard> getByPriorityScore(int priorityScore, boolean viewed) {
+    public Set<FlashCard> getByPriorityScore(int priorityScore, boolean viewed, boolean preview) {
         Set<FlashCard> cards = this.selectSet(viewed);
         if (priorityScore < 1 || priorityScore > 3) {
             throw new IllegalArgumentException("Priority score must be between 1-3");
@@ -183,7 +187,7 @@ public class Deck {
             FlashCard card = it.next();
             if (card.getPriorityScore() == priorityScore) {
                 result.add(card);
-                if (!viewed) {
+                if (!viewed && !preview) {
                     it.remove();
                     this.viewedFlashCards.add(card);
                 }
@@ -191,7 +195,7 @@ public class Deck {
         }
         return result;
     }
-    public FlashCard getRandomCard() {
+    public FlashCard getRandomCard(boolean preview) {
         this.validateDeck(false);
         int randomNumber = RAND.nextInt(1, this.flashCards.size() + 1);
         Iterator<FlashCard> it = this.flashCards.iterator();
@@ -199,8 +203,10 @@ public class Deck {
         for (int i = 0; i < randomNumber; i++) {
             card = it.next();
         }
-        it.remove();
-        this.viewedFlashCards.add(card);
+        if (!preview) {
+            it.remove();
+            this.viewedFlashCards.add(card);
+        }
         return card;
     }
     public Set<String> getAllTopics(boolean viewed) {
