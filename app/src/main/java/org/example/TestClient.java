@@ -12,7 +12,7 @@ public class TestClient {
         Scanner console = new Scanner(System.in);
         flashcardTesting(console);
         testDeck(console);
-        runNotesLoop();
+        runNotesLoop(console);
     }
 
     public static void runNotesLoop(Scanner console) {
