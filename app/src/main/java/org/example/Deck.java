@@ -51,19 +51,29 @@ public class Deck {
         }
         this.subject = newSubject;
     }
-    public FlashCard getCard(String questionOrAnswer, char option, boolean viewed) {
+    public FlashCard getCard(String questionOrAnswer, char option, boolean viewed, boolean preview) {
         this.validateDeck(viewed);
-        if (option != 'q' || option != 'Q' || option != 'a' || option != 'A') {
+        if (option != 'q' && option != 'Q' && option != 'a' && option != 'A') {
             throw new IllegalArgumentException("option is invalid.");
         }
         Set<FlashCard> cards = this.selectSet(viewed);
-        for (FlashCard card : cards) {
+        Iterator<FlashCard> it = cards.iterator();
+        while (it.hasNext()) {
+            FlashCard card = it.next();
             if (option == 'q' || option == 'Q') {
-                if (card.getQuestion().equalsIgnoreCase(questionOrAnswer)) {
+                if (stringsAreEqual(card.getQuestion(), questionOrAnswer)) {
+                    if (!viewed && !preview) {
+                        it.remove();
+                        this.viewedFlashCards.add(card);
+                    }
                     return card;
                 }
             } else {
-                if (card.getAnswer().equalsIgnoreCase(questionOrAnswer)) {
+                if (stringsAreEqual(card.getAnswer(), questionOrAnswer)) {
+                    if (!viewed && !preview) {
+                        it.remove();
+                        this.viewedFlashCards.add(card);
+                    }
                     return card;
                 }
             }
@@ -166,7 +176,7 @@ public class Deck {
         Iterator<FlashCard> it = cards.iterator();
         while (it.hasNext()) {
             FlashCard card = it.next();
-            if (card.getTopic().equalsIgnoreCase(topic)) {
+            if (stringsAreEqual(card.getTopic(), topic)) {
                 result.add(card);
                 if (!viewed && !preview) {
                     it.remove();
@@ -212,8 +222,13 @@ public class Deck {
     public Set<String> getAllTopics(boolean viewed) {
         Set<FlashCard> cards = this.selectSet(viewed);
         Set<String> result = this.assignSorting();
+
+        String topic = "";
         for (FlashCard card : cards) {
-            result.add(card.getTopic());
+            if (!stringsAreEqual(card.getTopic(), topic)) {
+                result.add(card.getTopic());
+            }
+            topic = card.getTopic();
         }
         return result;
     }
@@ -222,7 +237,7 @@ public class Deck {
             throw new IllegalArgumentException("Topic is invalid.");
         }
         for (FlashCard card : this.flashCards) {
-            if (card.getTopic().equalsIgnoreCase(topic)) {
+            if (stringsAreEqual(card.getTopic(), topic)) {
                 return true;
             }
         }
@@ -289,5 +304,8 @@ public class Deck {
             cards = this.viewedFlashCards;
         }
         return cards;
+    }
+    private static boolean stringsAreEqual(String s1, String s2) {
+        return s1.strip().replaceAll("\\s+", " ").equalsIgnoreCase(s2.strip().replaceAll("\\s+", " "));
     }
 }
