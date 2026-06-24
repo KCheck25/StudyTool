@@ -6,12 +6,14 @@ public class Deck {
     private String subject;
     private Set<FlashCard> flashCards;
     private Set<FlashCard> viewedFlashCards;
+    private boolean isSorted;
     public Deck(String subject, boolean sorted) {
         if (subject == null) {
             throw new IllegalArgumentException("Subject is invalid.");
         }
         this.subject = subject;
-        if (sorted) {
+        this.isSorted = sorted;
+        if (this.isSorted) {
             this.flashCards = new TreeSet<>();
             this.viewedFlashCards = new TreeSet<>();
         } else {
@@ -278,7 +280,7 @@ public class Deck {
 
     private <T> Set<T> assignSorting() {
         Set<T> set = null;
-        if (this.flashCards instanceof TreeSet) {
+        if (this.isSorted) {
             set = new TreeSet<>();
         } else {
             set = new HashSet<>();
