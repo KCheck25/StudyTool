@@ -46,14 +46,14 @@ public class Profile {
         }
         if (toDeck) {
             if (this.flashCards.contains(card) && this.decks.contains(deck)) {
-                deck.addCard(card);
                 this.flashCards.remove(card);
+                deck.addCard(card);
                 return true;
             }
         }
         if (this.decks.contains(deck) && deck.containsCard(card)) {
-            this.flashCards.add(card);
             deck.removeCard(card);
+            this.flashCards.add(card);
             return true;
         }
         return false;
