@@ -10,8 +10,8 @@ public class TestClient {
 
     public static void main(String[] args) throws Exception {
         Scanner console = new Scanner(System.in);
-        flashcardTesting(console);
-        testDeck(console);
+        //flashcardTesting(console);
+        //testDeck(console);
         runNotesLoop(console);
     }
 

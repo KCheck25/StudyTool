@@ -44,14 +44,30 @@ public class NotePage {
 
         clampCoords(cursorLoc);
 
-        System.out.println(this.contents);
+        System.out.println(System.getProperty("user.dir"));
+        try {
+            System.out.println(Files.readString(Path.of("data", "test.txt")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
+    /**
+     * Loads the file at the specified path and returns it as a new NotePage object
+     * @param filepath file url
+     * @return NotePage object with file data
+     * @throws IOException
+     */
     public static NotePage openFileAsNote(String filepath) throws IOException {
         Path path = Path.of(filepath);
-        Files.readString(path);
-        return new NotePage();
+        String contents = Files.readString(path);
+        return new NotePage(contents, new int[2]);
+    }
+
+    public void saveToFile(String filepath) throws IOException {
+        Path path = Path.of(filepath);
+        Files.writeString(path, getFull());
     }
 
     /**

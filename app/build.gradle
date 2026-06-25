@@ -10,6 +10,15 @@ plugins {
     id 'application'
 }
 
+// make jarfile executable
+jar {
+    manifest {
+        attributes (
+            'Main-Class': 'org.example.TestClient'
+        )
+    }
+}
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -39,10 +48,12 @@ application {
     // Define the main class for the application.
     mainClass = 'org.example.TestClient'
 }
-    run {
-            standardInput = System.in
-                workingDir = project.projectDir
-    }
+    
+run {
+    standardInput = System.in
+    workingDir = project.projectDir
+}
+
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
